@@ -128,12 +128,12 @@ function requiredFieldsMissingResponse(body: {
   return { ok: false, status: 400, body: { message: "Campos obrigatorios ausentes", required: ["title", "description", "category", "requesterId"], received: body } };
 }
 
-function findUserByIdOrFail(users: User[], id?: string): User | FacadeResult<User> {
+function findUserByIdOrFail(users: User[], id?: string): null | FacadeResult<User> {
   const user = users.find((user) => user.id === id);
   if (!user) {
     return { ok: false, status: 400, body: { message: "Usuario nao encontrado", id } };
   }
-  return user;
+  return null;
 }
 
 function buildNewTicket(body: {
@@ -247,7 +247,7 @@ const helpdeskFacade = {
       return requiredFieldsMissingResponse(body);
     }
 
-    const user = findUserByIdOrFail(database.users, body.requesterId);
+    findUserByIdOrFail(database.users, body.requesterId);
 
     const newTicket: Ticket = buildNewTicket(body);
     
