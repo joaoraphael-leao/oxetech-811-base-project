@@ -20,20 +20,41 @@ function generateId(prefix: string) {
   return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
 }
 
+const LONG_DESCRIPTION_THRESHOLD = 220;
+
+type PriorityContext = {
+  category: string;
+  description: string;
+};
+
+type PriorityRule = {
+  appliesTo: (context: PriorityContext) => boolean;
+  priority: TicketPriority;
+};
+
+function isUrgentPriority({ category, description }: PriorityContext): boolean {
+  return category === "infra" || description.toLowerCase().includes("urgente");
+}
+
+function isHighPriority({ category, description }: PriorityContext): boolean {
+  return category === "sistemas" || description.length > LONG_DESCRIPTION_THRESHOLD;
+}
+
+function isMediumPriority({ category }: PriorityContext): boolean {
+  return category === "academico";
+}
+
+const priorityRules: PriorityRule[] = [
+  { appliesTo: isUrgentPriority, priority: "urgent" },
+  { appliesTo: isHighPriority, priority: "high" },
+  { appliesTo: isMediumPriority, priority: "medium" },
+];
+
 function calculatePriority(category: string, description: string): TicketPriority {
-  if (category === "infra" || description.toLowerCase().includes("urgente")) {
-    return "urgent";
-  }
+  const context: PriorityContext = { category, description };
 
-  if (category === "sistemas" || description.length > 220) {
-    return "high";
-  }
-
-  if (category === "academico") {
-    return "medium";
-  }
-
-  return "low";
+  const matchedRule = priorityRules.find((rule) => rule.appliesTo(context));
+  return matchedRule?.priority ?? "low";
 }
 
 router.get("/health", (_request, response) => {
