@@ -136,6 +136,31 @@ function findUserByIdOrFail(users: User[], id?: string): User | FacadeResult<Use
   return user;
 }
 
+function buildNewTicket(body: {
+  title: string;
+  description: string;
+  category: string;
+  requesterId: string;
+  assignedToId?: string;
+}): Ticket {
+  const now = new Date().toISOString();
+  return {
+    id: generateId("ticket"),
+    title: body.title,
+    description: body.description,
+    category: body.category,
+    requesterId: body.requesterId,
+    assignedToId: body.assignedToId,
+    status: "open",
+    priority: calculatePriority(body.category, body.description),
+    createdAt: now,
+    updatedAt: now,
+  };
+}
+
+function sucessfulCreatedResponse <T>(data: T): FacadeResult<T> {
+  return { ok: true, status: 201, data };
+}
 
 const helpdeskFacade = {
   listUsers(): FacadeResult<User[]> {
@@ -224,24 +249,12 @@ const helpdeskFacade = {
 
     const user = findUserByIdOrFail(database.users, body.requesterId);
 
-    const now = new Date().toISOString();
-    const ticket: Ticket = {
-      id: generateId("ticket"),
-      title: body.title,
-      description: body.description,
-      category: body.category,
-      requesterId: body.requesterId,
-      assignedToId: body.assignedToId,
-      status: "open",
-      priority: calculatePriority(body.category, body.description),
-      createdAt: now,
-      updatedAt: now,
-    };
-
-    database.tickets.push(ticket);
+    const newTicket: Ticket = buildNewTicket(body);
+    
+    database.tickets.push(newTicket);
     writeDatabase(database);
 
-    return { ok: true, status: 201, data: ticket };
+    return sucessfulCreatedResponse(newTicket);
   },
 
   updateTicketStatus(
