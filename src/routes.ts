@@ -198,6 +198,31 @@ function buildEnrichedTicketList(database: Database, tickets: Ticket[]): TicketL
   return tickets.map((ticket) => enrichTicketListItem(database, ticket));
 }
 
+function countTicketsByStatus(
+  tickets: Ticket[],
+): { open: number; in_progress: number; resolved: number; closed: number } {
+  const counts = {
+    open: 0,
+    in_progress: 0,
+    resolved: 0,
+    closed: 0,
+  };
+
+  for (const ticket of tickets) {
+    if (ticket.status === "open") counts.open++;
+    if (ticket.status === "in_progress") counts.in_progress++;
+    if (ticket.status === "resolved") counts.resolved++;
+    if (ticket.status === "closed") counts.closed++;
+  }
+
+  return counts;
+}
+
+function countTicketsByPriority(tickets: Ticket[]): number {
+  return tickets.filter((ticket) => ticket.priority === "urgent").length;
+}
+
+
 const helpdeskFacade = {
   listUsers(): FacadeResult<User[]> {
     const database = readDatabase();
@@ -223,23 +248,15 @@ const helpdeskFacade = {
 
   getTicketsSummary(): FacadeResult<TicketsSummary> {
     const database = readDatabase();
+    const statusCounts = countTicketsByStatus(database.tickets);
+    const urgentCount = countTicketsByPriority(database.tickets);
+
     const summary: TicketsSummary = {
-      open: 0,
-      in_progress: 0,
-      resolved: 0,
-      closed: 0,
-      urgent: 0,
+      ...statusCounts,
+      urgent: urgentCount,
     };
 
-    for (const ticket of database.tickets) {
-      if (ticket.status === "open") summary.open++;
-      if (ticket.status === "in_progress") summary.in_progress++;
-      if (ticket.status === "resolved") summary.resolved++;
-      if (ticket.status === "closed") summary.closed++;
-      if (ticket.priority === "urgent") summary.urgent++;
-    }
-
-    return { ok: true, status: 200, data: summary };
+    return successfulOkResponse(summary);
   },
 
   getTicketById(id: string): FacadeResult<TicketDetail> {
