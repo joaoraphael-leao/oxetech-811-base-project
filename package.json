@@ -12,7 +12,7 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "seed": "tsx src/seed.ts",
-    "test": "echo \"Nenhum teste automatizado configurado ainda. Crie testes durante a refatoracao.\" && exit 0"
+    "test": "npx --yes httpyac send tests/endpoints.http --all"
   },
   "dependencies": {
     "cors": "^2.8.6",
