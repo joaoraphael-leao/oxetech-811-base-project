@@ -203,6 +203,21 @@ describe("GET /api/tickets", () => {
     expect(response.body[0].requester.password).toBeUndefined();
     expect(response.body[0].assigned.password).toBeUndefined();
   });
+
+  it("filtra por texto livre no title/description/category", async () => {
+    const response = await request(app).get("/api/tickets").query({ search: "existente" });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+    expect(response.body[0].id).toBe("ticket_001");
+  });
+
+  it("retorna lista vazia quando a busca nao encontra nada", async () => {
+    const response = await request(app).get("/api/tickets").query({ search: "nada-a-ver" });
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([]);
+  });
 });
 
 describe("GET /api/users", () => {
