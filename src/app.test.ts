@@ -149,6 +149,36 @@ describe("PATCH /api/tickets/:id/status", () => {
     expect(detail.body.comments[0].message).toBe("Assumindo o chamado.");
   });
 });
+
+describe("POST /api/tickets/:id/comments", () => {
+  it("retorna 404 quando o ticket nao existe", async () => {
+    const response = await request(app)
+      .post("/api/tickets/nao_existe/comments")
+      .send({ message: "Comentario", authorId: "user_ana" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe("Ticket nao encontrado");
+  });
+
+  it("retorna 400 quando o autor nao existe", async () => {
+    const response = await request(app)
+      .post("/api/tickets/ticket_001/comments")
+      .send({ message: "Comentario", authorId: "nao_existe" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Autor invalido" });
+  });
+
+  it("cria o comentario e retorna 201", async () => {
+    const response = await request(app)
+      .post("/api/tickets/ticket_001/comments")
+      .send({ message: "Ja estou verificando.", authorId: "user_carla" });
+
+    expect(response.status).toBe(201);
+    expect(response.body).toMatchObject({ ticketId: "ticket_001", message: "Ja estou verificando." });
+  });
+});
+
 });
 
 describe("GET /api/tickets", () => {
