@@ -1,5 +1,9 @@
 import fs from "node:fs";
 import path from "node:path";
+import bcrypt from "bcryptjs";
+
+const SALT_ROUNDS = 10;
+const hashPassword = (plainPassword: string): string => bcrypt.hashSync(plainPassword, SALT_ROUNDS);
 
 const initialDatabase = {
   users: [
@@ -8,21 +12,21 @@ const initialDatabase = {
       name: "Ana Beatriz",
       email: "ana.aluna@example.com",
       role: "student",
-      password: "123456",
+      password: hashPassword("123456"),
     },
     {
       id: "user_bruno",
       name: "Bruno Lima",
       email: "bruno.professor@example.com",
       role: "teacher",
-      password: "professor123",
+      password: hashPassword("professor123"),
     },
     {
       id: "user_carla",
       name: "Carla Suporte",
       email: "carla.suporte@example.com",
       role: "support",
-      password: "suporte123",
+      password: hashPassword("suporte123"),
     },
   ],
   tickets: [

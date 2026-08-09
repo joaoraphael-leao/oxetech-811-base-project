@@ -12,7 +12,9 @@
     "build": "tsc",
     "typecheck": "tsc --noEmit",
     "seed": "tsx src/seed.ts",
-    "test": "npx --yes httpyac send tests/endpoints.http --all"
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:manual": "npx --yes httpyac send tests/endpoints.http --all"
   },
   "dependencies": {
     "cors": "^2.8.6",
@@ -20,10 +22,16 @@
     "express": "^5.2.1"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.9.1",
+    "@types/supertest": "^7.2.0",
+    "@vitest/coverage-v8": "^4.1.10",
+    "bcryptjs": "^3.0.3",
+    "supertest": "^7.2.2",
     "tsx": "^4.22.3",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.10"
   }
 }
