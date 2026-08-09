@@ -117,6 +117,38 @@ describe("PATCH /api/tickets/:id/status", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ error: "Informe um comentario para fechar o chamado" });
   });
+
+  it("retorna 404 quando o ticket nao existe", async () => {
+    const response = await request(app)
+      .patch("/api/tickets/nao_existe/status")
+      .send({ status: "in_progress" });
+
+    expect(response.status).toBe(404);
+    expect(response.body.error).toBe("Ticket nao encontrado");
+  });
+
+  it("retorna 400 quando o authorId informado nao existe", async () => {
+    const response = await request(app)
+      .patch("/api/tickets/ticket_001/status")
+      .send({ status: "in_progress", authorId: "nao_existe" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Autor invalido" });
+  });
+
+  it("atualiza o status e registra o comentario informado", async () => {
+    const response = await request(app)
+      .patch("/api/tickets/ticket_001/status")
+      .send({ status: "in_progress", authorId: "user_carla", comment: "Assumindo o chamado." });
+
+    expect(response.status).toBe(200);
+    expect(response.body.status).toBe("in_progress");
+
+    const detail = await request(app).get("/api/tickets/ticket_001");
+    expect(detail.body.comments).toHaveLength(1);
+    expect(detail.body.comments[0].message).toBe("Assumindo o chamado.");
+  });
+});
 });
 
 describe("GET /api/tickets", () => {
