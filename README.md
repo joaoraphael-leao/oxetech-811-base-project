@@ -169,5 +169,4 @@ Consulte [docs/CHECKPOINTS.md](docs/CHECKPOINTS.md) para entender o escopo esper
 
 - [docs/DIAGNOSTICO-AVALIACAO-1.md](docs/DIAGNOSTICO-AVALIACAO-1.md) — diagnostico e solucoes da Avaliacao 1.
 - [docs/DIAGNOSTICO-AVALIACAO-2.md](docs/DIAGNOSTICO-AVALIACAO-2.md) — diagnostico e solucoes da Avaliacao 2.
-- [docs/CHECKLIST-PROJETO-FINAL.md](docs/CHECKLIST-PROJETO-FINAL.md) — acompanhamento do que foi feito no Projeto Final.
 - [docs/RELATORIO_FINAL.md](docs/RELATORIO_FINAL.md) — relatorio final de evolucao (estado inicial, problemas, melhorias, conceitos aplicados, decisoes, evidencias e limitacoes).
