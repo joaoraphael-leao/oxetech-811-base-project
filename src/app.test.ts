@@ -179,6 +179,13 @@ describe("POST /api/tickets/:id/comments", () => {
   });
 });
 
+describe("GET /api/tickets/summary", () => {
+  it("retorna as contagens por status e por prioridade urgente", async () => {
+    const response = await request(app).get("/api/tickets/summary");
+
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual({ open: 1, in_progress: 0, resolved: 0, closed: 0, urgent: 1 });
+  });
 });
 
 describe("GET /api/tickets", () => {
