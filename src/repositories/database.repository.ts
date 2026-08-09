@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { randomUUID } from "node:crypto";
 import type { Database } from "../types";
 
 function getDatabasePath(): string {
@@ -17,5 +18,5 @@ export function writeDatabase(database: Database): void {
 }
 
 export function generateId(prefix: string): string {
-  return `${prefix}_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+  return `${prefix}_${randomUUID()}`;
 }
