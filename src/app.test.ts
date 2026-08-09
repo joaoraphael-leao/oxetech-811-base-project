@@ -62,6 +62,32 @@ describe("POST /api/tickets", () => {
     expect(response.status).toBe(400);
     expect(response.body).toEqual({ error: "Solicitante invalido" });
   });
+
+  it("cria um ticket com assignedToId valido", async () => {
+    const response = await request(app).post("/api/tickets").send({
+      title: "Novo ticket com atendente",
+      description: "Descricao",
+      category: "academico",
+      requesterId: "user_ana",
+      assignedToId: "user_carla",
+    });
+
+    expect(response.status).toBe(201);
+    expect(response.body.assignedToId).toBe("user_carla");
+  });
+
+  it("retorna 400 quando o assignedToId nao existe", async () => {
+    const response = await request(app).post("/api/tickets").send({
+      title: "Novo ticket",
+      description: "Descricao",
+      category: "academico",
+      requesterId: "user_ana",
+      assignedToId: "nao_existe",
+    });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toEqual({ error: "Atendente invalido" });
+  });
 });
 
 describe("GET /api/tickets/:id", () => {
