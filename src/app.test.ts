@@ -97,6 +97,15 @@ describe("GET /api/tickets/:id", () => {
     expect(response.status).toBe(404);
     expect(response.body.error).toBe("Ticket nao encontrado");
   });
+
+  it("retorna o ticket com requester, assigned e comentarios enriquecidos", async () => {
+    const response = await request(app).get("/api/tickets/ticket_001");
+
+    expect(response.status).toBe(200);
+    expect(response.body.requester.name).toBe("Ana");
+    expect(response.body.assigned.name).toBe("Carla");
+    expect(response.body.comments).toEqual([]);
+  });
 });
 
 describe("PATCH /api/tickets/:id/status", () => {
