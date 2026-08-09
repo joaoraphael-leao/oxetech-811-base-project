@@ -5,21 +5,21 @@
       "name": "Ana Beatriz",
       "email": "ana.aluna@example.com",
       "role": "student",
-      "password": "123456"
+      "password": "$2b$10$lSWdiluah1ntOc9SRpqmjuflAFpLDHHK2G97ul4KEPB4nLK6wkqHe"
     },
     {
       "id": "user_bruno",
       "name": "Bruno Lima",
       "email": "bruno.professor@example.com",
       "role": "teacher",
-      "password": "professor123"
+      "password": "$2b$10$aXQAXsulDa4QrpRrgTk9duglXhLQK1qh7lZIUAYjB1mmCRrWTg9Tq"
     },
     {
       "id": "user_carla",
       "name": "Carla Suporte",
       "email": "carla.suporte@example.com",
       "role": "support",
-      "password": "suporte123"
+      "password": "$2b$10$h7QKcpO0w3v5aV4XYehtoe8J1U/yKtPSc.HTKYgXUqgJ3s2M5MObW"
     }
   ],
   "tickets": [
